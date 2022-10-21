@@ -1,0 +1,7 @@
+Fez tudo certinho; 
+- não é recomendado criar funções dentro de funções, mas funcionou tá valendo
+- no final da etapa 4, seria mais fácil ter utilizado o método groupby
+- utilizou métodos diferentes como rename_axis 🙂
+- bem legal que o código já está separado por funções 🙂
+- faltou etapa 5 de agrupar dados =/
+- a etapa 7 foi considerada feita pq o código está parametrizada
