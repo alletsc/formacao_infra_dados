@@ -1,6 +1,12 @@
 import prefect
 
 
-def log(message) -> None:
-    """Logs a message"""
-    prefect.context.logger.info(f"\n{message}")
+def log(msg):
+    """ 
+    mostra a msg no log do prefect
+    """
+    prefect.context.logger.info(msg)
+
+
+
+    

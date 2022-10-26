@@ -1,10 +1,13 @@
 from io import StringIO
+
 import pandas as pd
 from prefect import task
 import requests
+
 import re
+
 from utils import log
-import matplotlib.pyplot as plt
+
 
 @task
 def download_data(n_users: int) -> str:
@@ -25,7 +28,7 @@ def download_data(n_users: int) -> str:
 
 
 @task
-def gerar_df(data: str) -> pd.DataFrame:
+def parse_data(data: str) -> pd.DataFrame:
     """
     Transforma os dados em formato CSV em um DataFrame do Pandas, para facilitar sua manipulação.
 
@@ -41,7 +44,7 @@ def gerar_df(data: str) -> pd.DataFrame:
 
 
 @task
-def salvar_df_transformado(dataframe: pd.DataFrame) -> None:
+def save_report(dataframe: pd.DataFrame) -> None:
     """
     Salva o DataFrame em um arquivo CSV.
 
@@ -50,7 +53,7 @@ def salvar_df_transformado(dataframe: pd.DataFrame) -> None:
     """
     dataframe.to_csv("report.csv", index=False)
     log("Dados salvos em report.csv com sucesso!")
-    
+
 
 @task
 def format_phone_number(df, column_name):
@@ -74,9 +77,10 @@ def format_phone_number(df, column_name):
     else:
         print(f"Coluna {column_name} não encontrada em {df}.")
         return df.head()
-    
+
 
 @task
+# funcao para exibir total de user por genero
 def total_users(df):
     """Exibe o total de usuários por gênero
     
@@ -87,12 +91,10 @@ def total_users(df):
         'Gênero').to_frame('Quantidade').reset_index()
     df_gender["%"] = round(df_gender.Quantidade /
                            df_gender.Quantidade.sum() * 100, 0)
-    #salvar grafico
-    df_gender.plot(kind='bar', x='Gênero', y='Quantidade')
-    plt.savefig(f'total_genero.png')
-    
+
     log(f"Total de usuários por gênero: {df_gender}")
-    
+
+
 @task
 def total_users_country(df):
     """Exibe o total de usuários por país
@@ -107,8 +109,20 @@ def total_users_country(df):
     # add row com total de usuarios
     df_country = df_country.append({'País': 'Total', 'Quantidade': df_country.Quantidade.sum(
     ), '%': df_country['%'].sum()}, ignore_index=True)
-    # salvar grafico com as colunas país e quantidade
-    df_country.plot(kind='bar', x='País', y='Quantidade')
-    plt.savefig(f'total_pais.png')
 
     log(f"Total de usuários por país: {df_country}")
+
+@task
+def total_users_country(df):
+    """" % users country
+    
+     Args:
+        dataframe (pd.DataFrame): DataFrame do Pandas.
+    """
+    df_country = df.nat.value_counts().rename_axis('País').to_frame('Quantidade').reset_index()
+    df_country["%"] = round( df_country.Quantidade / df_country.Quantidade.sum() * 100, 0 )
+    # add row com total de usuarios
+    df_country = df_country.append({'País': 'Total', 'Quantidade': df_country.Quantidade.sum(), '%': df_country['%'].sum()}, ignore_index=True)
+
+    log(df_country)
+    
