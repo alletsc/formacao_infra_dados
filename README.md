@@ -5,4 +5,6 @@ voltado para profissionais da área de TI que atuam em diferentes Órgãos da PC
 com o objetivo amplo de capacitá-los em infraestrutura de dados de modo a torná-los 
 autônomos para o desenvolvimento dos mais diferentes projetos de dados em suas áreas de atuação.
 
+Realizado em 2022
+
 
